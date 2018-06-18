@@ -1,0 +1,5 @@
+pandas
+graphviz
+pydot
+matplotlib
+numpy
