@@ -3,8 +3,22 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import pydot
 import glob
+import re
+import logging
+import sys
 
 apps = []
+
+
+def setupConfig():
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+    logging.basicConfig(filename='DataExtractor.log', level=logging.DEBUG)
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    root.addHandler(ch)
 
 
 def read_graph_file():
@@ -37,7 +51,7 @@ def write_to_csv(headers, content, file_name):
 def read_xml_graph_file():
     e = ET.parse('thefile.xml').getroot()
     for atype in e.findall('type'):
-        print(atype.get('foobar'))
+        logging.info(atype.get('foobar'))
 
 
 def run():
@@ -47,43 +61,47 @@ def run():
     # you may also want to remove whitespace characters like `\n` at the end of each line
     apps = [x.strip() for x in content]
     for app in apps:
-        read_csv_methods(app)
+        read_xml_coverage(app, "systematic")
+        read_xml_coverage(app, "random")
 
 
-def read_csv_methods(app):
-    path = "D:/thesis/instrumentedapps/test/graphs/" + app + "-methods.csv"
-    file = Path(path)
-    methods = {}
-    if file.exists():
-        print("Found " + path)
-        random_coverage = glob.glob("D:/thesis/instrumentedapps/test/random/" + app + "*/coverage/coverage.xml")
-        systematic_coverage = glob.glob("D:/thesis/instrumentedapps/test/systematic/" + app + "*/coverage/coverage.xml")
+def read_xml_coverage(app, strategy):
+    logging.info("------------------------- Read coverage for " + app)
+    logging.info("Startegy " + strategy)
+    random_coverage = glob.glob("F:/thesis/instrumentedapps/batch6/" + strategy + "/" + app + ".apk*/coverage/coverage.xml")
+    headers = ["package", "class", "method", "strategy", "coverage_type", "coverage_percentage", "covered_lines",
+               "total_lines", ]
+    content = []
+    if len(random_coverage) != 1:
+        logging.error("Invalid number of coverage files:")
+        logging.error(len(random_coverage))
+        logging.error("**** Skip + " + app)
+        return
 
-        if len(random_coverage) == 1:
-            read_xml_coverage(random_coverage[0])
-
-        if len(systematic_coverage) == 1:
-            read_xml_coverage(systematic_coverage[0])
-
-        with open(file, newline='') as csv_file:
-            reader = csv.reader(csv_file)
-            next(reader, None)  # Skip the header.
-            # Unpack the row directly in the head of the for loop.
-            # for class_name, method in reader:
-            #     print("")
-                # print(class_name + " method " + method)
-                # methods[class_name] = (method)
-
-
-def read_xml_coverage(path):
-    tree = ET.parse(path)
+    tree = ET.parse(random_coverage[0])
     root = tree.getroot()
-    for child in root:
-        print(child.tag, child.attrib)
+    for package in root.iter("package"):
+        package_name = package.attrib['name']
+        for class_ in package.iter("class"):
+            class_name = package_name + "." + class_.attrib["name"]
+            for method in class_.iter("method"):
+                method_name = method.attrib["name"]
+                for coverage in method:
+                    coverage_type = coverage.attrib["type"][:-3]
+                    raw_value = coverage.attrib["value"]
+                    formatted_value = re.findall(r'\d+', raw_value)
+                    # logging.debug(
+                    #     class_name + " __ " + method_name + " __ " + strategy + "___ " + coverage_type + " __ " +
+                    #     formatted_value[0] + "% " + formatted_value[1] + "/" + formatted_value[2])
+                    content.append([package_name, class_name, method_name, strategy, coverage_type] + formatted_value)
+    logging.info("------------------------- Finished coverage for " + app)
+    write_to_csv(headers, content, "./data/" + app + "-coverage.csv")
 
 
 # read_graph_file()
+# read_xml_coverage("")
 
+setupConfig()
 run()
 
 
