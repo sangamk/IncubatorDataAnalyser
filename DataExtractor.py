@@ -68,9 +68,9 @@ def run():
 def read_xml_coverage(app, strategy):
     logging.info("------------------------- Read coverage for " + app)
     logging.info("Startegy " + strategy)
-    random_coverage = glob.glob("F:/thesis/instrumentedapps/batch6/" + strategy + "/" + app + ".apk*/coverage/coverage.xml")
+    random_coverage = glob.glob("F:/thesis/instrumentedapps/*/" + strategy + "/" + app + ".apk*/coverage/coverage.xml")
     headers = ["package", "class", "method", "strategy", "coverage_type", "coverage_percentage", "covered_lines",
-               "total_lines", ]
+               "total_lines"]
     content = []
     if len(random_coverage) != 1:
         logging.error("Invalid number of coverage files:")
