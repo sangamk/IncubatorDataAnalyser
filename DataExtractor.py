@@ -8,6 +8,7 @@ import logging
 import sys
 
 apps = []
+base_path = "F:/thesis/instrumentedapps"
 
 
 def setupConfig():
@@ -21,23 +22,6 @@ def setupConfig():
     root.addHandler(ch)
 
 
-def read_graph_file():
-    (graph,) = pydot.graph_from_dot_file("graph.dot")
-    edges = graph.obj_dict['edges']
-
-    headers = ["package", "target", "source", "methode"]
-    content = []
-
-    for key, (value,) in edges.items():
-        package = "package"
-        source = key[0].strip('\"')
-        target = key[1].strip('\"')
-        method = value["attributes"]["label"]
-        content.append([package, source, target, method])
-
-    write_to_csv(headers, content, "graph.csv")
-
-
 def write_to_csv(headers, content, file_name):
     my_file = Path(file_name)
     has_header = my_file.exists()
@@ -46,12 +30,6 @@ def write_to_csv(headers, content, file_name):
         if not has_header:
             writer.writerow(headers)
         writer.writerows(l for l in content)
-
-
-def read_xml_graph_file():
-    e = ET.parse('thefile.xml').getroot()
-    for atype in e.findall('type'):
-        logging.info(atype.get('foobar'))
 
 
 def run():
@@ -65,10 +43,11 @@ def run():
         read_xml_coverage(app, "random")
 
 
+# Read coverage files from systematic and random and covert it to one csv file
 def read_xml_coverage(app, strategy):
     logging.info("------------------------- Read coverage for " + app)
     logging.info("Startegy " + strategy)
-    random_coverage = glob.glob("F:/thesis/instrumentedapps/*/" + strategy + "/" + app + ".apk*/coverage/coverage.xml")
+    random_coverage = glob.glob(base_path+"/*/" + strategy + "/" + app + ".apk*/coverage/coverage.xml")
     headers = ["package", "class", "method", "strategy", "coverage_type", "coverage_percentage", "covered_lines",
                "total_lines"]
     content = []
