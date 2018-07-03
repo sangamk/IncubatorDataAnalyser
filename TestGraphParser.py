@@ -47,8 +47,7 @@ def read_xml_graph(app, strategy):
     logging.info("------------------------- Read graph for " + app)
     logging.info("Startegy " + strategy)
     graph_Path = glob.glob(base_path + "/*/" + strategy + "/" + app + ".apk*/model/graph.xml")
-    headers = ["package", "class", "method", "strategy", "coverage_type", "coverage_percentage", "covered_lines",
-               "total_lines"]
+    headers = ["source", "target", "action", "widget_id", "widget", "strategy"]
     content = []
     if len(graph_Path) != 1:
         logging.error("Invalid number of graph files:")
@@ -59,12 +58,24 @@ def read_xml_graph(app, strategy):
     tree = ET.parse(graph_Path[0])
     root = tree.getroot()
     # for report in root.iter("report"):
-    for activities in root.iter("activity"):
-        for source in activities.iter("source"):
-            logging.info(source.text)
-        for target in activities.iter("target"):
-            logging.info(target.text)
 
+    for activities in root.iter("activity"):
+        for xml_source in activities.findall("source"):
+            source = xml_source.text
+        for xml_target in activities.findall("target"):
+            target = xml_target.text
+        for xml_widgets in activities.iter("ev"):
+            action = xml_widgets.attrib["in"]
+
+            if len(list(xml_widgets)):
+                for xml_widgetInfo in xml_widgets.iter("w"):
+                    id = xml_widgetInfo.attrib["id"]
+                    widget_class = xml_widgetInfo.attrib["cl"]
+                    content.append([source, target, action, id, widget_class, strategy])
+            else:
+                content.append([source, target, action, "", "", strategy])
+
+    write_to_csv(headers, content, "./data/" + app + "-test-graph.csv")
 
 
 run()

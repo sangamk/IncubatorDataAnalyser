@@ -3,6 +3,7 @@ import glob
 
 base_path = "F:/thesis/instrumentedapps"
 
+
 # load statical graphs
 def load_csv_graphs():
     csv_graph_files = {x.strip(): base_path + '/batch1/graphs/' + x.strip() + ".csv" for x in apps}
@@ -28,6 +29,7 @@ def load_csv_methods():
     print(len(methods_df))
 
     return methods_df
+
 
 # load coverage from apps
 def load_csv_coverage():
@@ -59,6 +61,19 @@ def load_csv_coverage():
         print("Everything is good!")
 
     return coverage_df
+
+
+# Load csv test result graph
+def load_csv_test_graphs():
+    csv_graph_files = {x.strip(): base_path + '/batch1/graphs/' + x.strip() + "-test-graph.csv" for x in apps}
+
+    # for app,f in csv_graph_files.items():
+    df_from_each_file = (pd.read_csv(f).assign(app=app) for app, f in csv_graph_files.items())
+    test_graph_df = pd.concat(df_from_each_file, ignore_index=True)
+    print("Total graphs:")
+    print(len(test_graph_df))
+
+    return test_graph_df
 
 
 with open("./data/apps.txt") as f:
