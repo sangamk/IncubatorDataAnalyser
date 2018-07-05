@@ -59,23 +59,59 @@ def read_xml_graph(app, strategy):
     root = tree.getroot()
     # for report in root.iter("report"):
 
-    for activities in root.iter("activity"):
-        for xml_source in activities.findall("source"):
-            source = xml_source.text
-        for xml_target in activities.findall("target"):
-            target = xml_target.text
-        for xml_widgets in activities.iter("ev"):
-            action = xml_widgets.attrib["in"]
+    if len(list(root.iter("activity"))):
+        print("everything found")
+        for activities in root.iter("activity"):
 
-            if len(list(xml_widgets)):
-                for xml_widgetInfo in xml_widgets.iter("w"):
-                    id = xml_widgetInfo.attrib["id"]
-                    widget_class = xml_widgetInfo.attrib["cl"]
-                    content.append([source, target, action, id, widget_class, strategy])
-            else:
-                content.append([source, target, action, "", "", strategy])
+            for xml_source in activities.findall("source"):
+                source = xml_source.text
+            for xml_target in activities.findall("target"):
+                target = xml_target.text
+            for xml_widgets in activities.iter("ev"):
+                action = xml_widgets.attrib["in"]
 
-    write_to_csv(headers, content, "./data/" + app + "-test-graph.csv")
+                if len(list(xml_widgets)):
+                    for xml_widgetInfo in xml_widgets.iter("w"):
+                        id = xml_widgetInfo.attrib["id"]
+                        widget_class = xml_widgetInfo.attrib["cl"]
+                        content.append([source, target, action, id, widget_class, strategy])
+                else:
+                    content.append([source, target, action, "", "", strategy])
+
+        write_to_csv(headers, content, "./data/" + app + "-test-graph.csv")
+    else:
+        print("nothing found")
+        read_cml_logs(app, strategy)
+
+
+
+
+def read_cml_logs(app, strategy):
+    graph_Path = glob.glob(base_path + "/*/" + strategy + "/" + app + ".apk*/model/log_*.xml")
+    headers = ["source", "target", "action", "widget_id", "widget", "strategy"]
+    content = []
+    actvities = set()
+    if len(graph_Path) == 0:
+        logging.error("Invalid number of log files:")
+        logging.error(len(graph_Path))
+        logging.error("**** Skip + " + app)
+        return
+
+    for file in graph_Path:
+        try:
+            tree = ET.parse(file)
+            root = tree.getroot()
+            for activity in root.findall("a"):
+                actvities.add(activity.attrib["cl"])
+        except ET.ParseError:
+            print("invalid log continue...")
+
+    if len(actvities) != 1:
+        logging.error("invalid number of activities found for a class without a graph")
+        logging.error("**** Skip + " + app)
+        return
+
+    write_to_csv(headers, [[list(actvities)[0], "", "", "", "", strategy]], "./data/" + app + "-test-graph.csv")
 
 
 run()
