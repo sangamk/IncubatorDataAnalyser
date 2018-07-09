@@ -6,6 +6,7 @@ import glob
 import re
 import logging
 import sys
+from bs4 import BeautifulSoup
 
 apps = []
 base_path = "F:/thesis/instrumentedapps"
@@ -52,7 +53,7 @@ def read_xml_graph(app, strategy):
     if len(graph_Path) != 1:
         logging.error("Invalid number of graph files:")
         logging.error(len(graph_Path))
-        logging.error("**** Skip + " + app)
+        logging.error("**** Skip + " + app + " strat " + strategy)
         return
 
     tree = ET.parse(graph_Path[0])
@@ -99,18 +100,21 @@ def read_cml_logs(app, strategy):
 
     for file in graph_Path:
         try:
-            tree = ET.parse(file)
-            root = tree.getroot()
-            for activity in root.findall("a"):
-                actvities.add(activity.attrib["cl"])
-        except ET.ParseError:
+            handler = open(file).read()
+            soup = BeautifulSoup(handler, "lxml")
+            for activity in soup.find_all("a"):
+                if "com.google.android.gms.ads.AdActivity" != activity.attrs["cl"]:
+                    actvities.add(activity.attrs["cl"])
+        except ET.ParseError as err:
             print("invalid log continue...")
 
     if len(actvities) != 1:
-        logging.error("invalid number of activities found for a class without a graph")
-        logging.error("**** Skip + " + app)
+        logging.error("invalid number of activities found for a class without a graph ")
+        logging.error(len(actvities))
+        logging.error("**** Skip + " + app + " strat " +strategy)
         return
 
+    print("Found data in log")
     write_to_csv(headers, [[list(actvities)[0], "", "", "", "", strategy]], "./data/" + app + "-test-graph.csv")
 
 

@@ -65,15 +65,38 @@ def load_csv_coverage():
 
 # Load csv test result graph
 def load_csv_test_graphs():
-    csv_graph_files = {x.strip(): base_path + '/batch1/graphs/' + x.strip() + "-test-graph.csv" for x in apps}
+    # csv_graph_files = {x.strip(): base_path + '/batch1/graphs/' + x.strip() + "-test-graph.csv" for x in apps}
+    csv_graph_files = {x.strip(): './data/' + x.strip() + "-test-graph.csv" for x in apps}
 
     # for app,f in csv_graph_files.items():
-    df_from_each_file = (pd.read_csv(f).assign(app=app) for app, f in csv_graph_files.items())
-    test_graph_df = pd.concat(df_from_each_file, ignore_index=True)
-    print("Total graphs:")
+    graph_from_each_file = (pd.read_csv(f).assign(app=app) for app, f in csv_graph_files.items())
+    test_graph_df = pd.concat(graph_from_each_file, ignore_index=True)
+    print("Total entries:")
     print(len(test_graph_df))
 
     return test_graph_df
+
+
+def load_csv_stat_graph(load_transitive):
+    if load_transitive:
+        transitive = "-transitive"
+    else:
+        transitive = ""
+
+    csv_graph_files = {x.strip(): glob.glob(base_path + '/*/graphs/' + x.strip() + transitive + ".csv") for x in apps}
+
+    for k, v in csv_graph_files.items():
+        if len(v) != 1:
+            print("Found error ... aborting: " + k)
+            print(v)
+            return
+
+    df_from_each_file = (pd.read_csv(f[0], encoding='latin-1').assign(app=app) for app, f in csv_graph_files.items())
+    stat_graph_df = pd.concat(df_from_each_file, ignore_index=True)
+
+    print("Total entries:")
+    print(len(stat_graph_df))
+    return stat_graph_df
 
 
 with open("./data/apps.txt") as f:
@@ -81,3 +104,7 @@ with open("./data/apps.txt") as f:
 
 print("Number of apps: ")
 print(len(apps))
+
+# load_csv_stat_graph(True)
+# load_csv_test_graphs()
+# load_csv_coverage()

@@ -3,3 +3,5 @@ graphviz
 pydot
 matplotlib
 numpy
+lxml
+BeautifulSoup4
