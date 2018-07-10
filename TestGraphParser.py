@@ -34,6 +34,7 @@ def write_to_csv(headers, content, file_name):
 
 
 def run():
+    setupConfig()
     file = Path("./data/apps.txt")
     with open(file) as f:
         content = f.readlines()

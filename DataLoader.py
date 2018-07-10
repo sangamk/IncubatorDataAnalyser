@@ -6,7 +6,7 @@ base_path = "F:/thesis/instrumentedapps"
 
 # load statical graphs
 def load_csv_graphs():
-    csv_graph_files = {x.strip(): base_path + '/batch1/graphs/' + x.strip() + ".csv" for x in apps}
+    csv_graph_files = {x.strip(): base_path + '/data/' + x.strip() + ".csv" for x in apps}
 
     # for app,f in csv_graph_files.items():
     df_from_each_file = (pd.read_csv(f).assign(app=app) for app, f in csv_graph_files.items())
@@ -19,7 +19,7 @@ def load_csv_graphs():
 
 # load statical methods of all screens
 def load_csv_methods():
-    csv_methods_files = {x.strip(): base_path + '/batch1/graphs/' + x.strip() + "-methods.csv" for x in
+    csv_methods_files = {x.strip(): base_path + '/data/' + x.strip() + "-methods.csv" for x in
                          apps}
 
     df_from_each_file = (pd.read_csv(f).assign(app=app) for app, f in csv_methods_files.items())
@@ -33,7 +33,7 @@ def load_csv_methods():
 
 # load coverage from apps
 def load_csv_coverage():
-    csv_coverage_files = {x.strip(): glob.glob(base_path + '/*/graphs/' + x.strip() + "-coverage.csv") for
+    csv_coverage_files = {x.strip(): glob.glob(base_path + '/data/' + x.strip() + "-coverage.csv") for
                           x in
                           apps}
 
@@ -83,7 +83,7 @@ def load_csv_stat_graph(load_transitive):
     else:
         transitive = ""
 
-    csv_graph_files = {x.strip(): glob.glob(base_path + '/*/graphs/' + x.strip() + transitive + ".csv") for x in apps}
+    csv_graph_files = {x.strip(): glob.glob(base_path + '/data/' + x.strip() + transitive + ".csv") for x in apps}
 
     for k, v in csv_graph_files.items():
         if len(v) != 1:
