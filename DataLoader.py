@@ -66,10 +66,18 @@ def load_csv_coverage():
 # Load csv test result graph
 def load_csv_test_graphs():
     # csv_graph_files = {x.strip(): base_path + '/batch1/graphs/' + x.strip() + "-test-graph.csv" for x in apps}
-    csv_graph_files = {x.strip(): './data/' + x.strip() + "-test-graph.csv" for x in apps}
+    csv_graph_files = {x.strip(): glob.glob(base_path + '/data/' + x.strip() + "-test-graph.csv") for
+                       x in
+                       apps}
+
+    for k, v in csv_graph_files.items():
+        if len(v) != 1:
+            print("Found error ... aborting: " + k)
+            print(v)
+            return
 
     # for app,f in csv_graph_files.items():
-    graph_from_each_file = (pd.read_csv(f).assign(app=app) for app, f in csv_graph_files.items())
+    graph_from_each_file = (pd.read_csv(f[0]).assign(app=app) for app, f in csv_graph_files.items())
     test_graph_df = pd.concat(graph_from_each_file, ignore_index=True)
     print("Total entries:")
     print(len(test_graph_df))
@@ -106,5 +114,5 @@ print("Number of apps: ")
 print(len(apps))
 
 # load_csv_stat_graph(True)
-# load_csv_test_graphs()
+load_csv_test_graphs()
 # load_csv_coverage()
