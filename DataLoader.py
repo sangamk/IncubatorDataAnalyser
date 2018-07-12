@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 
 base_path = "F:/thesis/instrumentedapps"
+base_tool_path = "C:/Master/Thesis/IncubatorDataAnalyser"
 
 
 # load statical graphs
@@ -107,7 +108,7 @@ def load_csv_stat_graph(load_transitive):
     return stat_graph_df
 
 
-with open("./data/apps.txt") as f:
+with open(base_tool_path + "/data/apps.txt") as f:
     apps = set(f.readlines())
 
 print("Number of apps: ")
