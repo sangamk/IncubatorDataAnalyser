@@ -39,7 +39,6 @@ com.carpart.classic
 com.ccloud.screenlockemoticon
 com.cellartracker.app
 com.circle38.photocircle
-com.clinical.quicklabreference
 com.coke.ambassador
 com.dailylovehoroscopes.net
 com.digital_oppression.sleep_sounds_relax_meditation
@@ -148,7 +147,6 @@ asp.aniemo.pack6.ext
 br.com.geochenapps.tonguetwister
 com.brightdoor
 com.catscale.weighmytruck
-com.cognitial.directvremote
 com.conduit.app_f18f494c0e754c87824da61e48b42442.app
 com.coventsystems.whiteboard
 com.CrochetPatternIdeas.BehMedia
@@ -197,7 +195,6 @@ naukriApp.appModules.login
 org.reakcja.tdl.bestmetronomecom
 org.wmtech.internetgratisandroid
 androidlab.carlog
-br.com.gerenciadorfinanceiro.controller
 bth.studio.quickcharge
 church.itvessel.com.tarm
 co.mobius.vrcinema
@@ -245,11 +242,11 @@ com.oopatech.damps.android
 com.panagola.app.iplay
 com.parkme.consumer
 com.qxmd.readbyqxmd
-com.rewedigital.shop
 com.samuelbostick.parkinghelper
 com.smsrobot.periodlite
 com.socratica.mobile.bones
 com.sojos.rremote
+com.speedupbrowser4g5g
 com.sunardi.caraccidentlawyer
 com.t2ksports.wwe2k16CS
 com.teamviewer.quicksupport.samsung
@@ -285,7 +282,6 @@ com.codesector.speedview.free
 com.cookware.souprecipes
 com.cootek.smartinputv5.emoji.zombieemoji
 com.delwar.prem3
-com.doctorondemand.android.patient
 com.dotanime.animewallfullhd
 com.endless.healthyrecipes
 com.epicmedic.stephen.emtstudylite
@@ -378,4 +374,3 @@ kb2.soft.fuelcalculator
 com.nis.app
 com.monotype.android.font.fiftyfontsforsgtwelve
 com.kbb.mobileplatform
-com.speedupbrowser4g5g

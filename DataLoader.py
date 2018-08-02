@@ -86,19 +86,18 @@ def load_csv_test_graphs():
     return test_graph_df
 
 
-def load_csv_stat_graph(load_transitive):
-    if load_transitive:
-        transitive = "-transitive"
-    else:
-        transitive = ""
-
-    csv_graph_files = {x.strip(): glob.glob(base_path + '/data/' + x.strip() + transitive + ".csv") for x in apps}
+def load_csv_stat_graph(postfix):
+    csv_graph_files = {x.strip(): glob.glob(base_path + '/data/' + x.strip() + postfix + ".csv") for x in apps}
 
     for k, v in csv_graph_files.items():
         if len(v) != 1:
             print("Found error ... aborting: " + k)
             print(v)
             return
+
+    # for app, f in csv_graph_files.items():
+    #     print("safsdf " + app)
+    #     pd.read_csv(f[0], encoding='latin-1').assign(app=app)
 
     df_from_each_file = (pd.read_csv(f[0], encoding='latin-1').assign(app=app) for app, f in csv_graph_files.items())
     stat_graph_df = pd.concat(df_from_each_file, ignore_index=True)
@@ -114,6 +113,6 @@ with open(base_tool_path + "/data/apps.txt") as f:
 print("Number of apps: ")
 print(len(apps))
 
-# load_csv_stat_graph(True)
-load_csv_test_graphs()
+load_csv_stat_graph("-act-transitive")
+# load_csv_test_graphs()
 # load_csv_coverage()
