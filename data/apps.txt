@@ -241,7 +241,6 @@ com.onshift.mobile
 com.oopatech.damps.android
 com.panagola.app.iplay
 com.parkme.consumer
-com.qxmd.readbyqxmd
 com.samuelbostick.parkinghelper
 com.smsrobot.periodlite
 com.socratica.mobile.bones

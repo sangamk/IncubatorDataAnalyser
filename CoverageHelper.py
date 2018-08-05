@@ -10,7 +10,7 @@ def widget_counter(df: pd.DataFrame):
     unique_widgets_per_app = df.groupby("method").widget.value_counts(dropna=False).to_frame(
         name="widget_count")
     unique_widgets_per_app['percentage'] = unique_widgets_per_app.apply(lambda x: 100 * x / x.sum())
-    return unique_widgets_per_app
+    return unique_widgets_per_app.reset_index()
 
 
 def diff_screens(full_graph: pd.DataFrame, found_graph: pd.DataFrame):
