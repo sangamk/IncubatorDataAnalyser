@@ -7,7 +7,7 @@ def filter(type: str, strategy: str, df: pd.DataFrame):
 
 def widget_counter(df: pd.DataFrame):
     # unique_widgets_per_app = df.widget.value_counts(dropna=False).to_frame(
-    unique_widgets_per_app = df.groupby("method").widget.value_counts(dropna=False).to_frame(
+    unique_widgets_per_app = df.widget.value_counts(dropna=False).to_frame(
         name="widget_count")
     unique_widgets_per_app['percentage'] = unique_widgets_per_app.apply(lambda x: 100 * x / x.sum())
     return unique_widgets_per_app.reset_index()

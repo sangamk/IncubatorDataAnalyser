@@ -113,6 +113,6 @@ with open(base_tool_path + "/data/apps.txt") as f:
 print("Number of apps: ")
 print(len(apps))
 
-load_csv_stat_graph("-act-transitive")
+# load_csv_stat_graph("-act-transitive")
 # load_csv_test_graphs()
 # load_csv_coverage()

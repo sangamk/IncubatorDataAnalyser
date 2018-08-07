@@ -42,7 +42,6 @@ com.carpart.classic
 com.ccloud.screenlockemoticon
 com.cellartracker.app
 com.circle38.photocircle
-com.clinical.quicklabreference
 com.coke.ambassador
 com.dailylovehoroscopes.net
 com.davor.thirtydayfit
@@ -126,7 +125,6 @@ com.wahoofitness.fitness
 com.wakefern.shoprite.deli
 com.wallfish.funfox
 com.watchtv.freetv
-com.webport.airport
 com.wordwebsoftware.android.wordweb
 com.worldremit.android
 com.xnview.XnSketch
@@ -214,7 +212,6 @@ naukriApp.appModules.login
 org.reakcja.tdl.bestmetronomecom
 org.wmtech.internetgratisandroid
 androidlab.carlog
-br.com.gerenciadorfinanceiro.controller
 bth.studio.quickcharge
 church.itvessel.com.tarm
 co.mobius.vrcinema
@@ -309,7 +306,6 @@ com.codesector.speedview.free
 com.cookware.souprecipes
 com.cootek.smartinputv5.emoji.zombieemoji
 com.delwar.prem3
-com.doctorondemand.android.patient
 com.dotanime.animewallfullhd
 com.endless.healthyrecipes
 com.epicmedic.stephen.emtstudylite
