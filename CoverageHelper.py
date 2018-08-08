@@ -5,6 +5,11 @@ def filter(type: str, strategy: str, df: pd.DataFrame):
     return df[(df.coverage_type == type) & (df.strategy == strategy)]
 
 
+def calc_coverage(coverage_df: pd.DataFrame):
+    coverage_per_app = coverage_df.groupby(["app"])[['covered_lines', 'total_lines']].apply(lambda x: x.sum())
+    coverage_per_app['percentage_covered'] = (coverage_per_app.covered_lines / coverage_per_app.total_lines) * 100
+    return coverage_per_app.percentage_covered
+
 def widget_counter(df: pd.DataFrame):
     # unique_widgets_per_app = df.widget.value_counts(dropna=False).to_frame(
     unique_widgets_per_app = df.widget.value_counts(dropna=False).to_frame(
